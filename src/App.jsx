@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Canvas, MathUtils } from "@react-three/fiber";
 
 import { ColorContext, colors } from "./context";
 import Tile from "./components/Tile";
@@ -8,13 +9,13 @@ import "./App.css";
 
 function App() {
   const [color, setColor] = useState(colors[0]);
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(30);
   const [posX, setPosX] = useState(0);
   const [posY, setPosY] = useState(0);
 
   const size = 50;
-  const width = 12; // 1200
-  const height = 12; // 1200
+  const width = 120; // 1200
+  const height = 120; // 1200
   const grid = [...Array(width).keys()]
     .map((i) =>
       [...Array(height).keys()].map((j) => (
@@ -25,8 +26,8 @@ function App() {
 
   const onWheel = (e) => {
     setZoom((prev) => {
-      const newVal = e.deltaY < 0 ? prev + 0.5 : prev - 0.5;
-      return Math.max(0.5, newVal);
+      const newVal = prev + (e.deltaY < 0 ? 1 : -1);
+      return Math.max(1, newVal);
     });
   };
 
@@ -55,20 +56,21 @@ function App() {
     };
   }, []);
 
+  const aspect = window.innerWidth / window.innerHeight;
+  const d = 20;
+
   return (
     <ColorContext.Provider value={{ color, setColor, colors }}>
-      <div
-        id="grid"
-        style={{
-          width: width * 50,
-          height: height * 50,
-          scale: zoom.toString(),
-          marginTop: posY,
-          marginLeft: posX,
+      <Canvas
+        orthographic
+        camera={{
+          zoom,
+          position: [20, -20, 20],
         }}
       >
-        {grid}
-      </div>
+        <ambientLight intensity={Math.PI / 2} />
+        <group rotation={[MathUtils.degToRad(90), 0, 0]}>{grid}</group>
+      </Canvas>
       <ColorSwatches />
     </ColorContext.Provider>
   );

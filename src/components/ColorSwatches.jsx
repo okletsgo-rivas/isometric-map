@@ -17,8 +17,9 @@ function ColorSwatches() {
 
   return (
     <ul id="colorSwatches">
-      {colorContext.colors.map((itm, i) => (
+      {colorContext.colors.map((itm) => (
         <Swatch
+          key={itm.name}
           {...itm}
           selected={itm === colorContext.color}
           onSelect={() => colorContext.setColor(itm)}
