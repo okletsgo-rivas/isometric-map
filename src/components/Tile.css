@@ -1,0 +1,17 @@
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  color: rgba(0,0,0,0.5);
+  font-size: 0.75em;
+  background: #ccc;
+  outline: 1px solid #aaa;
+}
+
+.tile:hover {
+  outline: 2px solid #000;
+  z-index: 999;
+  cursor: pointer;
+}
