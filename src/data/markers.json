@@ -1,0 +1,30 @@
+{
+  "list": [
+    {
+      "title": "KOR",
+      "type": "hq",
+      "coords": [24, 24],
+      "coords2": [750, 746]
+    },
+    {
+      "title": "AIM",
+      "type": "hq",
+      "coords": [20, 28]
+    },
+    {
+      "title": "KOR",
+      "type": "flag",
+      "coords": [10, 19]
+    },
+    {
+      "title": "KOR",
+      "type": "flag",
+      "coords": [17, 12]
+    },
+    {
+      "title": "KOR",
+      "type": "stronghold",
+      "coords": [26, 12]
+    }
+  ]
+}
