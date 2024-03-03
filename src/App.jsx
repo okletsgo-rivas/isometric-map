@@ -1,67 +1,24 @@
-import { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import { MathUtils } from "three";
 
-import { ColorContext, colors } from "./context";
-import Tile from "./components/Tile";
-import ColorSwatches from "./components/ColorSwatches";
+import { Providers } from "./context";
+import TopBar from "./components/layout/TopBar";
+import BottomBar from "./components/layout/BottomBar";
+import ColorSwatches from "./components/controls/ColorSwatches";
+import Coordinates from "./components/controls/Coordinates";
+import SelectorSize from "./components/controls/SelectorSize";
+import SelectorBox from "./components/controls/SelectorBox";
+import TileGrid from "./components/TileGrid";
 
 import "./App.css";
-import { OrbitControls } from "@react-three/drei";
 
 function App() {
-  const [color, setColor] = useState(colors[0]);
-  const [posX, setPosX] = useState(0);
-  const [posY, setPosY] = useState(0);
-
-  const size = 50;
-  const width = 120; // 1200
-  const height = 120; // 1200
-  const grid = [...Array(width).keys()]
-    .map((i) =>
-      [...Array(height).keys()].map((j) => (
-        <Tile key={`${i}-${j}`} i={i} j={j} />
-      ))
-    )
-    .flat();
-
-  // const onWheel = (e) => {
-  //   setZoom((prev) => {
-  //     const newVal = prev + (e.deltaY < 0 ? 1 : -1);
-  //     return Math.max(1, newVal);
-  //   });
-  // };
-
-  // const onMouseDown = () => {
-  //   document.addEventListener("mousemove", onMouseMove);
-  //   document.addEventListener("mouseup", onMouseUp);
-  // };
-
-  // const onMouseMove = (e) => {
-  //   setPosX((prev) => prev + e.movementX);
-  //   setPosY((prev) => prev + e.movementY);
-  // };
-
-  // const onMouseUp = () => {
-  //   document.removeEventListener("mousemove", onMouseMove);
-  //   document.removeEventListener("mouseup", onMouseUp);
-  // };
-
-  // useEffect(() => {
-  //   document.addEventListener("wheel", onWheel);
-  //   document.addEventListener("mousedown", onMouseDown);
-
-  //   return () => {
-  //     document.removeEventListener("wheel", onWheel);
-  //     document.removeEventListener("mousedown", onMouseDown);
-  //   };
-  // }, []);
-
-  const aspect = window.innerWidth / window.innerHeight;
-  const d = 20;
+  const width = 12; // 1200
+  const height = 12; // 1200
 
   return (
-    <ColorContext.Provider value={{ color, setColor, colors }}>
+    <Providers width={width} height={height}>
       <Canvas
         orthographic
         camera={{
@@ -70,27 +27,35 @@ function App() {
           near: -100,
         }}
       >
-        {/* <orthographicCamera
-          args={[
-            window.innerWidth / -2,
-            window.innerWidth / 2,
-            window.innerHeight / 2,
-            window.innerHeight / -2,
-            0.01,
-            3000,
-          ]}
-        /> */}
         <OrbitControls enableRotate={false} enableDamping={false} />
-        <ambientLight intensity={Math.PI / 2} />
+        <ambientLight intensity={3} />
         <group
           rotation={[MathUtils.degToRad(90), 0, 0]}
-          position={[-60, 0, -60]}
+          position={[width / -2, 0, height / -2]}
         >
-          {grid}
+          <TileGrid />
+          <SelectorBox />
         </group>
       </Canvas>
-      <ColorSwatches />
-    </ColorContext.Provider>
+      <TopBar>
+        <div>
+          <ColorSwatches />
+        </div>
+        <div
+          style={{ display: "flex", flexGrow: 1, flexDirection: "row-reverse" }}
+        >
+          <SelectorSize />
+        </div>
+      </TopBar>
+      <BottomBar>
+        <div>
+          <Coordinates />
+        </div>
+        <div
+          style={{ display: "flex", flexGrow: 1, flexDirection: "row-reverse" }}
+        ></div>
+      </BottomBar>
+    </Providers>
   );
 }
 

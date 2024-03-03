@@ -1,25 +1,31 @@
-import { useContext, useState } from "react";
-import { ColorContext } from "../context";
-import "./Tile.css";
+import { useContext, useRef } from "react";
+import { DataContext } from "../context";
 
-const defaultColor = { name: "default", hex: "#ccc" };
+function Tile({ data }) {
+  const ctx = useContext(DataContext);
+  const planeRef = useRef();
 
-function Tile({ i, j }) {
-  const colorContext = useContext(ColorContext);
-  const [color, setColor] = useState(defaultColor);
+  const { x, y, color } = data;
 
   const onClick = () => {
-    const curColor =
-      color.name !== defaultColor.name ? defaultColor : colorContext.color;
-    setColor(curColor);
+    ctx.onClick(data);
+  };
+
+  const onOver = () => {
+    ctx.setSelectedCoords({ x, y });
   };
 
   return (
-    <mesh position={[i * 1.05, j * 1.05, 0]} onClick={onClick}>
-      <edgesGeometry />
-      <planeGeometry args={[1, 1]} />
-      <meshStandardMaterial color={color.hex} />
-    </mesh>
+    <group position={[x, y, 0]}>
+      <mesh onClick={onClick} onPointerOver={onOver} position={[0.5, 0.5, 0]}>
+        <planeGeometry ref={planeRef} args={[1, 1]} />
+        <meshStandardMaterial color={color} flatShading />
+      </mesh>
+      <lineSegments position={[0.5, 0.5, 0]}>
+        <edgesGeometry attach="geometry" args={[planeRef.current]} />
+        <lineBasicMaterial attach="material" color={0x999999} />
+      </lineSegments>
+    </group>
   );
 }
 

@@ -1,9 +1,7 @@
 #colorSwatches {
   display: flex;
+  margin: 0;
   padding: 6px;
-  position: absolute;
-  top: 10px;
-  left: 10px;
   background: #fff;
   border: 1px solid #000;
   list-style: none;
